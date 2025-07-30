@@ -12,8 +12,11 @@ def get_coordinates(city, key):
             lat = round(results[0]['geometry']['lat'], 2)
             lon = round(results[0]['geometry']['lng'], 2)
             country = results[0]['components']['country']
-            region = results[0]['components']['state']
-            return f'Широта: {lat}, Долгота: {lon}, Страна: {country}, Регион: {region}'
+            if 'state' in results[0]['components']:
+                region = results[0]['components']['state']
+                return f'Широта: {lat}, Долгота: {lon}\n Страна: {country}\n Регион: {region}'
+            else:
+                return f'Широта: {lat}, Долгота: {lon}\n Страна: {country}'
         else:
             return 'Город не найден'
     except Exception as e:
@@ -23,7 +26,7 @@ def get_coordinates(city, key):
 def show_coordinates(event=None):
     city = entry.get()
     coordinates = get_coordinates(city, key)
-    label.config(text=f'Координаты города {city}:\n {coordinates}')
+    label.config(text=f'Координаты города {city}: {coordinates}')
 
 
 key = '5cf6dcaf3ada4335bd40f2aeb9962d85'
@@ -32,7 +35,7 @@ coordinates = get_coordinates(city, key)
 
 window = Tk()
 window.title('Координаты городов')
-window.geometry('400x100')
+window.geometry('400x120')
 
 entry = Entry()
 entry.pack()
